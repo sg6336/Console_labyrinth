@@ -5,7 +5,7 @@ class Arduino
 public:
 	static bool move(char key);
 	static char move();
-	static void makeDesicion();
+	static char makeDesicion(int i, char pdir);
 
 	static int ax;
 	static int ay;
@@ -15,6 +15,10 @@ public:
 
 	static char dir;
 
-	static int visitCounts[11][11];
-};
+	static char pdir;
 
+	static constexpr int rows = 10;
+	static constexpr int cols = 10;
+
+	static int visitCounts[rows + 1][cols + 1];
+};

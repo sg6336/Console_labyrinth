@@ -1,4 +1,5 @@
 ﻿#include "Server.h"
+
 #include "Arduino.h"
 
 #include <windows.h>
@@ -31,19 +32,19 @@ void Server::processMove(bool canMove, char dir)
     if (!canMove)
         return;
 
-    if (dir == LEFT)
+    if (dir == 'a')
     {
         if (x > 0) { x -= 1; }
     }
-    if (dir == RIGHT)
+    if (dir == 'd')
     {
         if (x < cols) { x += 1; }
     }
-    if (dir == UP)
+    if (dir == 'w')
     {
         if (y > 0) { y -= 1; }
     }
-    if (dir == DOWN)
+    if (dir == 's')
     {
         if (y < rows) { y += 1; }
     }
@@ -70,7 +71,24 @@ void Server::processInput()
     drawPlayer();
 }
 
-bool Server::checkMove(char key)
+bool Server::checkMove(char dir)
 {
+    if (dir == 'a')
+    {
+        if (x <= 0) { return false; }
+    }
+    if (dir == 'd')
+    {
+        if (x >= cols) { return false; }
+    }
+    if (dir == 'w')
+    {
+        if (y <= 0) { return false; }
+    }
+    if (dir == 's')
+    {
+        if (y >= rows) { return false; }
+    }
+
     return true;
 }

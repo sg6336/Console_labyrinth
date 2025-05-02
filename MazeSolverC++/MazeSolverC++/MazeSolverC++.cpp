@@ -7,6 +7,8 @@
 #include <windows.h>
 #include <iostream>
 
+#include <cstdlib>
+
 void MoveCursorTo(int x, int y) 
 {
     COORD coord = { (SHORT)x, (SHORT)y };
@@ -23,7 +25,13 @@ int main()
 
     while(1)
     {
-        Server::processInput();
+        //Server::processInput();
+        char dir = Arduino::move();
+        bool canMove = Arduino::move(dir);
+
+        Server::processMove(canMove, dir); // костиль переписать під івент
+
+        Server::drawPlayer();
     }
 
     return 0;
