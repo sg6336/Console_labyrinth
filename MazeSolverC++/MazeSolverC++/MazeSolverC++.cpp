@@ -23,14 +23,18 @@ int main()
     cursorInfo.bVisible = FALSE;
     SetConsoleCursorInfo(hConsole, &cursorInfo);
 
+    Server::loadMap("maze1.txt");
+    Server::drawMap();
+    Server::drawPlayer();
+
     while(1)
     {
         //Server::processInput();
         char dir = Arduino::move();
-        bool canMove = Arduino::move(dir);
+        //bool canMove = Arduino::askServerMove(dir);
 
-        Server::processMove(canMove, dir); // костиль переписать під івент
-
+        Server::processMove(true, dir); // костиль переписать під івент
+       
         Server::drawPlayer();
     }
 

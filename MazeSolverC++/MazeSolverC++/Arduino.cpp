@@ -8,12 +8,22 @@ int Arduino::ay = 5;
 int Arduino::pax = Arduino::ax;
 int Arduino::pay = Arduino::ay;
 
-char Arduino::dir = 'd';
-char Arduino::pdir = 'd';
+int Arduino::dirIndex = 3;
+int Arduino::pdirIndex = 3;
 
-int Arduino::visitCounts[rows + 1][cols + 1] = {};
+const char Arduino::dirs[4] = {'w', 's', 'a', 'd'};
 
-bool Arduino::move(char key)
+int Arduino::visitCounts[rows][cols] = {};
+
+char Arduino::getInverseDir(char dir)
+{
+    if (dir == UP) { return DOWN; }
+    if (dir == DOWN) { return UP; }
+    if (dir == LEFT) { return RIGHT; }
+    if (dir == RIGHT) { return LEFT; }
+}
+
+bool Arduino::askServerMove(char key)
 {
     if (Server::checkMove(key))
     {
@@ -25,54 +35,57 @@ bool Arduino::move(char key)
 
 char Arduino::move()
 {
-    //while (1)
+    pax = ax;
+    pay = ay;
+
+    //dir = makeDesicion(i, pdir);
+    dirIndex = pdirIndex;
+    char dir = dirs[dirIndex];
+    //if (dir == ' ') { continue; }
+
+    if (askServerMove(dir))
     {
-        pax = ax;
-        pay = ay;
+        ++visitCounts[ay][ax];
 
-        //dir = makeDesicion(i, pdir);
-        dir = pdir;
-        //if (dir == ' ') { continue; }
+        return dir;
+    }
+    else
+    {
+        visitCounts[ay][ax] = 255;
+    }
 
-        if (move(dir))
+    /*ax = pax;
+    ay = pay;*/
+
+    for (int i = 1; i < 4; ++i)
+    {
+        dirIndex = (dirIndex + i) % 4;
+
+        dir = makeDesicion(dirIndex, dirs[dirIndex]);
+
+        if (dir == getInverseDir(dirs[pdirIndex])) { continue; }
+
+        if (askServerMove(dir))
         {
             ++visitCounts[ay][ax];
 
-            pdir = dir;
-
-            return dir;
+            break;
         }
         else
         {
             visitCounts[ay][ax] = 255;
         }
-
-        /*ax = pax;
-        ay = pay;*/
-
-        for (int i = 0; i < 4; ++i)
-        {
-            dir = makeDesicion(i, pdir);
-
-            if (dir == ' ') { continue; }
-
-            if (move(dir))
-            {
-                ++visitCounts[ay][ax];
-
-                pdir = dir;
-
-                break;
-            }
-            else
-            {
-                visitCounts[ay][ax] = 255;
-            }
-
-            ax = pax;
-            ay = pay;
-        }
     }
+
+    if (dir == dirs[pdirIndex])
+    {
+        dir = getInverseDir(dir);
+    }
+
+    pdirIndex = dirIndex;
+
+    ax = pax;
+    ay = pay;
 
     return dir;
 }
@@ -84,20 +97,12 @@ char Arduino::makeDesicion(int i, char pdir)
     //if (dir == LEFT) { ax--; }
     //if (dir == RIGHT) { ax++; }
 
-    char result;
-    char ipdir;
-
-    if (pdir == UP) { ipdir = DOWN; }
-    if (pdir == DOWN) { ipdir = UP; }
-    if (pdir == LEFT) { ipdir = RIGHT; }
-    if (pdir == RIGHT) { ipdir = LEFT; }
+    char result = ' ';
 
     if (i == 0) { result = UP; }
     if (i == 1) { result = DOWN; }
     if (i == 2) { result = LEFT; }
     if (i == 3) { result = RIGHT; }
-
-    if (result == ipdir) { result = ' '; }
 
     return result;
 }

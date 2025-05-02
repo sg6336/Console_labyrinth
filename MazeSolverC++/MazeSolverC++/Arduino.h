@@ -3,9 +3,11 @@
 class Arduino
 {
 public:
-	static bool move(char key);
+	static bool askServerMove(char key);
 	static char move();
 	static char makeDesicion(int i, char pdir);
+
+	static char getInverseDir(char dir);
 
 	static int ax;
 	static int ay;
@@ -13,12 +15,14 @@ public:
 	static int pax;
 	static int pay;
 
-	static char dir;
+	static const char dirs[4];
 
-	static char pdir;
+	static int dirIndex;
+
+	static int pdirIndex;
 
 	static constexpr int rows = 10;
-	static constexpr int cols = 10;
+	static constexpr int cols = 5;
 
-	static int visitCounts[rows + 1][cols + 1];
+	static int visitCounts[rows][cols];
 };
