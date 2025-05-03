@@ -1,4 +1,4 @@
-#include "Arduino.h"
+﻿#include "Arduino.h"
 
 #include "Server.h"
 
@@ -43,7 +43,7 @@ char Arduino::move()
     char dir = dirs[dirIndex];
     //if (dir == ' ') { continue; }
 
-    if (askServerMove(dir))
+    if (askServerMove(dir)) //  // виклик датчика
     {
         ++visitCounts[ay][ax];
 
@@ -65,7 +65,7 @@ char Arduino::move()
 
         if (dir == getInverseDir(dirs[pdirIndex])) { continue; }
 
-        if (askServerMove(dir))
+        if (askServerMove(dir)) // виклик датчика
         {
             ++visitCounts[ay][ax];
 
