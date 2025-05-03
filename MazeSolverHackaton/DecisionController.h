@@ -19,7 +19,7 @@ enum class DesSt
 class DecisionController
 {
 public:
-  Des getDes(DesSt& st, int debugId);
+  Des getDes(DesSt& st);
   void saveInfo(Des des, bool isValid);
 
 private:
@@ -31,6 +31,6 @@ private:
 
   int m_badDesAmount = 0;
 
-  bool m_isPrevDesAllowed = false;
+  bool m_isPrevDesAllowed = true;
   bool m_isLastDesForced = false;
 };

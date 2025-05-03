@@ -1,35 +1,18 @@
 #include "Robot.h"
 
-#include "Utils.h"
-
-static int debugCounter = 0;
-
-void Robot::moveAuto(int debugId)
+void Robot::moveAuto()
 {
   while(1)
   {
-    //-----DEBUG-----
-    Serial.println("DEBUG COUNTER: " + String(debugCounter));
-    //---------------
-
     DesSt st; // тип 'вибору'. Може бути звичайний (СOMMON) або примусовий (FORCED)
 
-    Des des = getDes(st, debugId); // отримати 'вибір' і його 'тип'
+    Des des = getDes(st); // отримати 'вибір' і його 'тип'
 
-    bool isAllowed = checkDes(des, st, debugId); // робимо запит на прийняття вибору
-
-    //-----DEBUG-----
-    Serial.println("Decision: " + Utils::desToStr(des));
-    Serial.println("isAllowed: " + String(isAllowed));
-    //---------------
+    bool isAllowed = checkDes(des, st); // робимо запит на прийняття вибору
 
     if (isAllowed)
     {
       Dir dir = parseDes(des); // перетворюємо вибір у напрямок
-      
-      //-----DEBUG-----
-      Serial.println("Direction: " + Utils::dirToStr(dir));
-      //---------------
 
       if (askMove(dir)) // передаємо напрямок
       {
@@ -42,14 +25,9 @@ void Robot::moveAuto(int debugId)
   }
 }
 
-bool Robot::checkDes(Des des, DesSt st, int debugId)
+bool Robot::checkDes(Des des, DesSt st)
 {
-  int ss = sc.getState(debugId);
-
-  //-----DEBUG-----
-  Serial.println("Debug id: " + String(debugId));
-  Serial.println("Sensor state: " + String(ss));
-  //---------------
+  int ss = sc.getState();
 
   if (des == Des::MOVE_FORWARD) 
   {
@@ -69,13 +47,9 @@ bool Robot::checkDes(Des des, DesSt st, int debugId)
   return false;
 }
 
-Des Robot::getDes(DesSt& status, int debugId)
+Des Robot::getDes(DesSt& status)
 {
-  //-----DEBUG-----
-  Serial.println("getDes()::Debug id: " + String(debugId));
-  //---------------
-
-  Des des = dc.getDes(status, debugId);
+  Des des = dc.getDes(status);
 
   return des;
 }
@@ -98,10 +72,4 @@ bool Robot::askMove(Dir dir)
 void Robot::saveDesInfo(Des des, bool isValid)
 {
   dc.saveInfo(des, isValid);
-
-  //-----DEBUG-----
-  Serial.println("In saveDecisionInfo()");
-  Serial.println("Decision: " + Utils::desToStr(des));
-  Serial.println("IsValid: " + String(isValid));
-  //---------------
 }

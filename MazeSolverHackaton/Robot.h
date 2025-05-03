@@ -7,11 +7,11 @@
 class Robot
 {
 public:
-  void moveAuto(int debutId);
+  void moveAuto();
 
 private:
-  Des getDes(DesSt& status, int debugId);
-  bool checkDes(Des des, DesSt st, int debugId);
+  Des getDes(DesSt& status);
+  bool checkDes(Des des, DesSt st);
   Dir parseDes(Des des);
   bool askMove(Dir dir);
   void saveDesInfo(Des des, bool isValid);

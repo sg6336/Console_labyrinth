@@ -3,7 +3,7 @@
 class SensorController
 {
 public:
-  int getState(int debugId);
+  int getState();
 
 private:
 

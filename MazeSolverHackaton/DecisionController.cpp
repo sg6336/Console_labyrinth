@@ -1,10 +1,9 @@
 #include "DecisionController.h"
 
-Des DecisionController::getDes(DesSt& st, int debugId)
+Des DecisionController::getDes(DesSt& st)
 {
-  //-----DEBUG-----
+  st = DesSt::COMMON;
 
-  //---------------
   if (m_isPrevDesAllowed) 
   { 
     return desById(m_desId); 
@@ -18,8 +17,6 @@ Des DecisionController::getDes(DesSt& st, int debugId)
 
     return invDesById(m_pdesId);
   }
-
-  st = DesSt::COMMON;
 
   m_desId = (m_desId + 1) % desAmount; // change id to next decision
 
